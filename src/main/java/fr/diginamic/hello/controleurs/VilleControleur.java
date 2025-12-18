@@ -26,12 +26,12 @@ public class VilleControleur {
         villes.add(new Ville(6,"Pau", 77200));
     }
 
-    @GetMapping("/villes/get")
+    @GetMapping("/villes")
     public List<Ville> getVilles() {
         return villes;
     }
 
-    @GetMapping("/villes/get/{id}")
+    @GetMapping("/villes/{id}")
     public ResponseEntity<?> getVille(@PathVariable int id) {
         for (Ville v: villes){
             if (v.getId()==id){
@@ -42,7 +42,7 @@ public class VilleControleur {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La ville n'a pas été trouvée.");
     }
 
-    @PutMapping("/villes/update/{id}")
+    @PutMapping("/villes/{id}")
     public ResponseEntity<?> updateVille(@PathVariable int id,  @RequestBody Ville ville) {
         for (Ville v: villes){
             if (v.getId()==id){
@@ -55,7 +55,7 @@ public class VilleControleur {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La ville n'a pas été trouvée.");
     }
 
-    @DeleteMapping("/villes/delete/{id}")
+    @DeleteMapping("/villes/{id}")
     public ResponseEntity<?> deleteVille(@PathVariable int id) {
             Ville villeToDelete = null;
         for (Ville v: villes) {
@@ -72,7 +72,7 @@ public class VilleControleur {
         }
     }
 
-    @PostMapping("/villes/add/{id}")
+    @PostMapping("/villes/{id}")
     public ResponseEntity<String> addVille(@RequestBody Ville ville) {
         for (Ville v : villes) {
             if (v.getNom().equals(ville.getNom())) {
