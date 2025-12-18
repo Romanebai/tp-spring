@@ -57,14 +57,19 @@ public class VilleControleur {
 
     @DeleteMapping("/villes/{id}")
     public ResponseEntity<?> deleteVille(@PathVariable int id) {
-        for (Ville v: villes){
-            if (v.getId()==id){
-                System.out.println(v);
-                villes.remove(v);
-                return ResponseEntity.ok("Ville supprimée avec succès." + v);
+            Ville villeToDelete = null;
+        for (Ville v: villes) {
+            if (v.getId() == id) {
+                villeToDelete = v;
+                break;
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La ville n'a pas été trouvée.");
+        if (villeToDelete != null) {
+            villes.remove(villeToDelete);
+                return ResponseEntity.ok("Ville supprimée avec succès.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("La ville n'a pas été trouvée.");
+        }
     }
 
     @PostMapping
