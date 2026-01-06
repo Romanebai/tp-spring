@@ -18,7 +18,7 @@ public class VilleDao {
     private EntityManager em;
 
     /**
-     * Extract all list.
+     * Extract all towns in a list.
      *
      * @return the list
      */
@@ -28,7 +28,7 @@ public class VilleDao {
     }
 
     /**
-     * Extract ville by id ville.
+     * Extract ville by id.
      *
      * @param id the id
      * @return the ville
@@ -40,7 +40,7 @@ public class VilleDao {
     }
 
     /**
-     * Extract ville by departement id list.
+     * Extract ville by departement id in a list.
      *
      * @param id the id
      * @return the list
@@ -52,7 +52,7 @@ public class VilleDao {
     }
 
     /**
-     * Extract ville by nom ville.
+     * Extract ville by nom.
      *
      * @param nom the nom
      * @return the ville
@@ -77,7 +77,7 @@ public class VilleDao {
     }
 
     /**
-     * Insert ville ville.
+     * Insert a town.
      *
      * @param ville the ville
      * @return the ville
@@ -88,7 +88,7 @@ public class VilleDao {
     }
 
     /**
-     * Find top villes by departement list.
+     * Find top villes by departement id.
      *
      * @param departementId the departement id
      * @param n             the n
@@ -102,7 +102,7 @@ public class VilleDao {
     }
 
     /**
-     * Find villes by population and departement list.
+     * Find villes by population and departement between a min and a max .
      *
      * @param departementId the departement id
      * @param minPop        the min pop

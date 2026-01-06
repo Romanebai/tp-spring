@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * The type Departement controleur.
+ * Departement Controller
  */
 @RestController
 @RequestMapping("/app")
@@ -29,7 +29,7 @@ public class DepartementControleur {
     }
 
     /**
-     * Gets departements.
+     * Gets all departements on localhost:8282/app/departements
      *
      * @return the departements
      * @throws VilleApiException the ville api exception
@@ -41,7 +41,7 @@ public class DepartementControleur {
     }
 
     /**
-     * Gets departement by id.
+     * Gets departement by id on localhost:8282/app/departements/id
      *
      * @param id the id
      * @return the departement by id
@@ -54,7 +54,7 @@ public class DepartementControleur {
     }
 
     /**
-     * Gets departements by nom.
+     * Gets departements by nom on localhost:8282/app/departements/nom.
      *
      * @param nom the nom
      * @return the departements by nom
@@ -67,7 +67,7 @@ public class DepartementControleur {
     }
 
     /**
-     * Add departement response entity.
+     * Insert departement entity on localhost:8282/app/departements
      *
      * @param dpt the dpt
      * @return the response entity
@@ -80,7 +80,7 @@ public class DepartementControleur {
     }
 
     /**
-     * Update departement by id response entity.
+     * Update departement by id on localhost:8282/app/departements/id
      *
      * @param id  the id
      * @param dpt the dpt
@@ -94,7 +94,7 @@ public class DepartementControleur {
     }
 
     /**
-     * Delete departement by id response entity.
+     * Delete departement by id on localhost:8282/app/departements/id
      *
      * @param id the id
      * @return the response entity

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * The type Ville controleur.
+ * The type Ville controller.
  */
 @RestController
 @RequestMapping("/app")
@@ -19,7 +19,7 @@ public class VilleControleur {
     private final VilleService villeService;
 
     /**
-     * Instantiates a new Ville controleur.
+     * Instantiates a new Ville Controller.
      *
      * @param villeService the ville service
      */
@@ -28,9 +28,9 @@ public class VilleControleur {
     }
 
     /**
-     * Gets villes.
+     * Gets all town on localhost:8282/app/villes
      *
-     * @return the villes
+     * @return the town
      * @throws VilleApiException the ville api exception
      */
     @GetMapping("/villes")
@@ -41,10 +41,10 @@ public class VilleControleur {
     }
 
     /**
-     * Gets ville by id.
+     * Gets town by id on localhost:8282/app/villes/id
      *
      * @param id the id
-     * @return the ville by id
+     * @return the town by id
      * @throws VilleApiException the ville api exception
      */
     @GetMapping("/villes/{id}")
@@ -54,10 +54,10 @@ public class VilleControleur {
     }
 
     /**
-     * Gets ville by nom.
+     * Gets town by nom on localhost:8282/app/villes/nom.
      *
      * @param nom the nom
-     * @return the ville by nom
+     * @return the town by nom
      * @throws VilleApiException the ville api exception
      */
     @GetMapping("/villes/nom")
@@ -67,9 +67,9 @@ public class VilleControleur {
     }
 
     /**
-     * Add ville response entity.
+     * Insert town on localhost:8282/app/ville
      *
-     * @param ville the ville
+     * @param ville the town
      * @return the response entity
      * @throws VilleApiException the ville api exception
      */
@@ -81,7 +81,7 @@ public class VilleControleur {
 
 
     /**
-     * Update ville by id response entity.
+     * Update town by id on localhost:8282/app/villes/id
      *
      * @param id    the id
      * @param ville the ville
@@ -96,7 +96,7 @@ public class VilleControleur {
 
 
     /**
-     * Delete ville by id response entity.
+     * Delete town by id on localhost:8282/app/villes/id
      *
      * @param id the id
      * @return the response entity
@@ -109,11 +109,11 @@ public class VilleControleur {
     }
 
     /**
-     * Gets top ville.
+     * Gets top town on localhost:8282/app/villes/top/id/n
      *
-     * @param id the id
-     * @param n  the n
-     * @return the top ville
+     * @param id the departement id
+     * @param n  the number of towns needed
+     * @return the top town
      * @throws VilleApiException the ville api exception
      */
     @GetMapping("/villes/top/{id}/{n}")
@@ -125,10 +125,10 @@ public class VilleControleur {
     /**
      * Gets villes by population.
      *
-     * @param id  the id
-     * @param min the min
-     * @param max the max
-     * @return the villes by population
+     * @param id  the departement id
+     * @param min the min population
+     * @param max the max population
+     * @return towns by population
      * @throws VilleApiException the ville api exception
      */
     @GetMapping("/villes/population")

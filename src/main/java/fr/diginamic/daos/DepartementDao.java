@@ -18,7 +18,7 @@ public class DepartementDao {
     private EntityManager em;
 
     /**
-     * Extract all list.
+     * Extract all departements in a list.
      *
      * @return the list
      */
@@ -28,7 +28,7 @@ public class DepartementDao {
     }
 
     /**
-     * Extract departement by id departement.
+     * Extract departement by id.
      *
      * @param id the id
      * @return the departement
@@ -40,7 +40,7 @@ public class DepartementDao {
     }
 
     /**
-     * Extract departement by name departement.
+     * Extract departement by name.
      *
      * @param nom the nom
      * @return the departement
@@ -52,7 +52,7 @@ public class DepartementDao {
     }
 
     /**
-     * Extract departement by code departement.
+     * Extract departement by code.
      *
      * @param code the code
      * @return the departement
@@ -78,7 +78,7 @@ public class DepartementDao {
     }
 
     /**
-     * Insert departement departement.
+     * Insert departement.
      *
      * @param departement the departement
      * @return the departement
