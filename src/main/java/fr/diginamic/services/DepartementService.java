@@ -1,17 +1,23 @@
 package fr.diginamic.services;
 
 import fr.diginamic.daos.DepartementDao;
+import fr.diginamic.daos.DepartementRepository;
 import fr.diginamic.daos.VilleDao;
 import fr.diginamic.dtos.DepartementDto;
+import fr.diginamic.dtos.VilleDto;
 import fr.diginamic.entities.Departement;
 import fr.diginamic.entities.Ville;
 import fr.diginamic.exceptions.VilleApiException;
 import fr.diginamic.mappers.DepartementMapper;
+import fr.diginamic.mappers.VilleMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The type Departement service.
@@ -23,6 +29,26 @@ public class DepartementService {
     private DepartementDao departementDao;
     @Autowired
     private VilleDao villeDao;
+
+    private final DepartementRepository departementRepository;
+
+    public DepartementService(DepartementRepository departementRepository) {this.departementRepository = departementRepository;}
+
+    public Page<DepartementDto> findAll(int page, int size) {
+        PageRequest pagination = PageRequest.of(page, size);
+        Page<Departement> dpts = departementRepository.findAll(pagination);
+        return dpts.map(DepartementMapper::dptDto);
+    }
+
+    public Optional<DepartementDto> findById(Integer id) {
+        return departementRepository.findById(id).map(DepartementMapper::dptDto);
+    }
+
+    public DepartementDto findByNomStartingWith(String nom) {
+        Departement dpt = departementRepository.findByNomStartingWith(nom);
+        return DepartementMapper.dptDto(dpt);
+    }
+
 
     /**
      * Extract departements list.

@@ -18,10 +18,8 @@ public class VilleDto {
 
     @Override
     public String toString() {
-        return " VilleDto " +
-                "id: " + id +
-                ", nom: " + nom + '\'' +
-                ", population: " + population;
+        return nom + " - " +
+                " population: " + population + " habitants.";
     }
 
     /**
