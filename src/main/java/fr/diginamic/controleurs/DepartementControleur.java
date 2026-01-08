@@ -8,7 +8,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import fr.diginamic.daos.DepartementDao;
 import fr.diginamic.daos.VilleDao;
 import fr.diginamic.dtos.DepartementDto;
+import fr.diginamic.dtos.RegionDto;
 import fr.diginamic.dtos.VilleDto;
+import fr.diginamic.entities.Region;
 import fr.diginamic.entities.Ville;
 import fr.diginamic.exceptions.VilleApiException;
 import fr.diginamic.services.DepartementService;
@@ -141,10 +143,11 @@ public class DepartementControleur {
         DepartementDto departement = departementService.extractDepartementByCode(code);
         int dptId = departement.getId();
         List<VilleDto> villes = villeService.extractVilleByDepartementId(dptId);
+        String region = departement.getNomRegion();
 
         BaseFont baseFont = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.EMBEDDED);
         Font titleFont = new Font(baseFont, 20, Font.BOLD, new BaseColor(0, 51, 80));
-        Paragraph title = new Paragraph("Les villes du département " + departement.getNom() + " (" + departement.getCode() + ")", titleFont);
+        Paragraph title = new Paragraph("Les villes du département " + departement.getNom() + " (" + departement.getCode() + ")" + ". Region : " + region, titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         title.setSpacingAfter(20);
         document.add(title);

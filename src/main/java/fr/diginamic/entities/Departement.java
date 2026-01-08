@@ -21,6 +21,9 @@ public class Departement {
     @OneToMany(mappedBy="departement")
     private List<Ville> villes = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name="REG_ID")
+    private Region region;
     /**
      * Instantiates a new Departement.
      */
@@ -102,5 +105,13 @@ public class Departement {
      */
     public void setVilles(List<Ville> villes) {
         this.villes = villes;
+    }
+
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
     }
 }

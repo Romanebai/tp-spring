@@ -26,6 +26,12 @@ public class DepartementMapper {
         dto.setNom(departement.getNom());
         dto.setCode(departement.getCode());
 
+        if (departement.getRegion() != null) {
+            dto.setNomRegion(departement.getRegion().getNom());
+            dto.setCodeRegion(departement.getRegion().getCode());
+        }
+
+
         return dto;
     }
 

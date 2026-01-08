@@ -8,6 +8,9 @@ public class DepartementDto {
     private String code;
     private String nom;
 
+    private String codeRegion;
+    private String nomRegion;
+
     /**
      * Instantiates a new Departement dto.
      */
@@ -84,5 +87,21 @@ public class DepartementDto {
      */
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getCodeRegion() {
+        return codeRegion;
+    }
+
+    public void setCodeRegion(String codeRegion) {
+        this.codeRegion = codeRegion;
+    }
+
+    public String getNomRegion() {
+        return nomRegion;
+    }
+
+    public void setNomRegion(String nomRegion) {
+        this.nomRegion = nomRegion;
     }
 }

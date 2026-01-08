@@ -1,19 +1,17 @@
 package fr.diginamic.daos;
 
-import fr.diginamic.dtos.VilleDto;
 import fr.diginamic.entities.Ville;
-import fr.diginamic.exceptions.VilleApiException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface VilleRepository extends CrudRepository<Ville, Integer> {
 
-    //Optional<Ville> findById(int id) throws VilleApiException;
     Page<Ville> findAll(Pageable pageable);
+
+    List<Ville>findByDepartementId(int id);
 
     //Recherche de toutes les villes dont le nom commence par une chaine de caractères
     Ville findByNomStartingWith(String nom);
@@ -32,6 +30,4 @@ public interface VilleRepository extends CrudRepository<Ville, Integer> {
 
     //Recherche des n villes les plus peuplées d’un département donné
     Page<Ville>findByDepartement_Code(String departement, Pageable pageable);
-
-    List<Ville>findByDepartementId(int id);
 }

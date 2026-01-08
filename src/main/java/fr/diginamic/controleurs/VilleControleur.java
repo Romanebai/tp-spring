@@ -1,8 +1,6 @@
 package fr.diginamic.controleurs;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfWriter;
 import fr.diginamic.dtos.VilleDto;
 import fr.diginamic.exceptions.VilleApiException;
 import fr.diginamic.services.VilleService;

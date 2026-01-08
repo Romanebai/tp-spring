@@ -27,7 +27,7 @@ public class DepartementService {
     private DepartementDao departementDao;
     @Autowired
     private VilleDao villeDao;
-
+    @Autowired
     private final DepartementRepository departementRepository;
 
     public DepartementService(DepartementRepository departementRepository) {this.departementRepository = departementRepository;}
