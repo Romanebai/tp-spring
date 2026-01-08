@@ -60,8 +60,7 @@ public class DepartementDao {
     public Departement extractDepartementByCode(String code) {
         TypedQuery<Departement> query = em.createQuery("SELECT d FROM Departement d WHERE d.code = :code", Departement.class);
         query.setParameter("code", code);
-        List<Departement> results = query.getResultList();
-        return results.isEmpty() ? null : results.get(0);
+        return query.getSingleResultOrNull();
     }
 
 

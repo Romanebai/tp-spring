@@ -2,21 +2,21 @@ package fr.diginamic.mappers;
 
 import fr.diginamic.dtos.VilleDto;
 import fr.diginamic.entities.Ville;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * The type Ville mapper.
- */
-public class VilleMapper {
+@Component
+public class VilleMapperImpl implements IVilleMapper {
     /**
      * Ville dto ville dto.
      *
      * @param ville the ville
      * @return the ville dto
      */
-    public static VilleDto villeDto(Ville ville) {
+    public VilleDto villeDto(Ville ville) {
         if (ville == null) {
             return null;
         }
@@ -41,7 +41,7 @@ public class VilleMapper {
      * @param villes the villes
      * @return the list
      */
-    public static List<VilleDto> villeDtoList(List<Ville> villes) {
+    public List<VilleDto> villeDtoList(List<Ville> villes) {
         List<VilleDto> dtos = new ArrayList<>();
 
         for (Ville v : villes) {
@@ -57,7 +57,7 @@ public class VilleMapper {
      * @param dto the dto
      * @return the ville
      */
-    public static Ville toEntity(VilleDto dto) {
+    public Ville toEntity(VilleDto dto) {
         if (dto == null) {
             return null;
         }
@@ -73,6 +73,5 @@ public class VilleMapper {
 
         return ville;
     }
-
 
 }

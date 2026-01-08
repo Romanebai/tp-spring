@@ -32,4 +32,6 @@ public interface VilleRepository extends CrudRepository<Ville, Integer> {
 
     //Recherche des n villes les plus peuplées d’un département donné
     Page<Ville>findByDepartement_Code(String departement, Pageable pageable);
+
+    List<Ville>findByDepartementId(int id);
 }

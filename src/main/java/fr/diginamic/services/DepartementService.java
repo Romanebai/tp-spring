@@ -4,12 +4,10 @@ import fr.diginamic.daos.DepartementDao;
 import fr.diginamic.daos.DepartementRepository;
 import fr.diginamic.daos.VilleDao;
 import fr.diginamic.dtos.DepartementDto;
-import fr.diginamic.dtos.VilleDto;
 import fr.diginamic.entities.Departement;
 import fr.diginamic.entities.Ville;
 import fr.diginamic.exceptions.VilleApiException;
 import fr.diginamic.mappers.DepartementMapper;
-import fr.diginamic.mappers.VilleMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -93,6 +91,14 @@ public class DepartementService {
         if (departement == null) {
             throw new VilleApiException("Le département n'a pas été trouvée pour ce nom.");
 
+        }
+        return DepartementMapper.dptDto(departement);
+    }
+
+    public DepartementDto extractDepartementByCode(String code) throws VilleApiException {
+        Departement departement = departementDao.extractDepartementByCode(code);
+        if (departement == null) {
+            throw new VilleApiException("Le département n'a pas été trouvé pour ce code.");
         }
         return DepartementMapper.dptDto(departement);
     }

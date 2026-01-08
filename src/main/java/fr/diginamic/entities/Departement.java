@@ -29,8 +29,7 @@ public class Departement {
     @Override
     public String toString() {
         return "code: " + code +
-                ", nom: " + nom +
-                ", villes: " + villes;
+                ", nom: " + nom;
     }
 
     /**
