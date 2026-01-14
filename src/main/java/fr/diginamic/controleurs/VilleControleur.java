@@ -17,7 +17,7 @@ import java.util.Optional;
  * The type Ville controller.
  */
 @RestController
-@RequestMapping("/app")
+
 public class VilleControleur implements IVilleControleur {
 
     private final VilleService villeService;

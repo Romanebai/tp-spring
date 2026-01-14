@@ -1,0 +1,25 @@
+package fr.diginamic.security;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+public class SecurityConfig {
+    @Bean
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        //Autorise les requêtes GET sur les villes uniquement,
+        //Toutes les autres requêtes doivent être authentifiées.
+        System.out.println("JE SUIS LA");
+        http.httpBasic(Customizer.withDefaults());
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.GET, "/villes/**").permitAll()
+                .anyRequest().authenticated()
+        );
+        return http.build();
+    }
+}
