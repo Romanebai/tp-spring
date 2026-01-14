@@ -22,6 +22,11 @@ public class VilleControleur implements IVilleControleur {
 
     private final VilleService villeService;
 
+    /**
+     * Instantiates a new Ville controleur.
+     *
+     * @param villeService the ville service
+     */
     public VilleControleur(VilleService villeService) {
         this.villeService = villeService;
     }
@@ -77,7 +82,17 @@ public class VilleControleur implements IVilleControleur {
         Page<VilleDto> villes = villeService.mostPopByDepartement(dpt, n);
         return ResponseEntity.ok(villes);
     }
-    //Ajoutez une méthode dans votre classe VilleControleur qui exporte au format CSV toutes les
+
+    /**
+     * Fiche ville sup min.
+     *
+     * @param min      the min
+     * @param response the response
+     * @throws VilleApiException the ville api exception
+     * @throws IOException       the io exception
+     * @throws DocumentException the document exception
+     */
+//Ajoutez une méthode dans votre classe VilleControleur qui exporte au format CSV toutes les
     //villes dont la population est supérieure à un minimum donné.
     // nom de la ville, nombre d’habitants, codedépartement, nom du département
     @GetMapping("/{min}/fiche")

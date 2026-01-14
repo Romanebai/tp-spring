@@ -3,11 +3,19 @@ package fr.diginamic;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * The type Main application.
+ */
 @SpringBootApplication
-public class HelloApplication {
+public class MainApplication {
 
+	/**
+	 * The entry point of application.
+	 *
+	 * @param args the input arguments
+	 */
 	public static void main(String[] args) {
-		SpringApplication.run(HelloApplication.class, args);
+		SpringApplication.run(MainApplication.class, args);
 	}
 
 }

@@ -38,6 +38,7 @@ public class DepartementService {
         return dpts.map(DepartementMapper::dptDto);
     }
 
+
     public Optional<DepartementDto> findById(Integer id) {
         return departementRepository.findById(id).map(DepartementMapper::dptDto);
     }

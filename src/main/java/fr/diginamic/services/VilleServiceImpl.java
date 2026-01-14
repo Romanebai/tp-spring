@@ -1,8 +1,10 @@
 package fr.diginamic.services;
 
+import fr.diginamic.daos.VilleDao;
 import fr.diginamic.daos.VilleRepository;
 import fr.diginamic.dtos.VilleDto;
 import fr.diginamic.entities.Ville;
+import fr.diginamic.exceptions.VilleApiException;
 import fr.diginamic.mappers.IVilleMapper;
 import fr.diginamic.mappers.VilleMapperImpl;
 import org.springframework.data.domain.Page;
@@ -18,17 +20,29 @@ import java.util.Optional;
 @Service
 public class VilleServiceImpl implements VilleService {
 
-  private final VilleRepository villerepository;
+    private final VilleRepository villerepository;
     private final IVilleMapper villeMapper;
+    private final VilleMapperImpl mapper;
+    private final VilleDao villeDao;
 
-    public VilleServiceImpl(VilleRepository villerepository, IVilleMapper villeMapper) {
+    public VilleServiceImpl(VilleRepository villerepository, IVilleMapper villeMapper, VilleMapperImpl mapper, VilleDao villeDao) {
         this.villerepository = villerepository;
         this.villeMapper = villeMapper;
+        this.mapper = mapper;
+        this.villeDao = villeDao;
     }
 
     @Override
     public Optional<VilleDto> findById(Integer id) {
         return villerepository.findById(id).map(villeMapper::villeDto);
+    }
+
+    public List<VilleDto> extractAllVilles() throws VilleApiException {
+        List<Ville> ville = villeDao.extractAll();
+        if (ville.isEmpty()) {
+            throw new VilleApiException("La liste des villes est vide.");
+        }
+        return mapper.villeDtoList(ville);
     }
 
     @Override

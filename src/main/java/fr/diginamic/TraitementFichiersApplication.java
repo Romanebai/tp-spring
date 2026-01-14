@@ -14,17 +14,31 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.web.client.RestTemplate;
 
 
+/**
+ * The type Traitement fichiers application.
+ */
 @SpringBootApplication
 public class TraitementFichiersApplication implements CommandLineRunner {
 
     private final DepartementDao departementDao;
     private final RegionDao regionDao;
 
+    /**
+     * Instantiates a new Traitement fichiers application.
+     *
+     * @param departementDao the departement dao
+     * @param regionDao      the region dao
+     */
     public TraitementFichiersApplication(DepartementDao departementDao, RegionDao regionDao) {
         this.departementDao = departementDao;
         this.regionDao = regionDao;
     }
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         new SpringApplicationBuilder(TraitementFichiersApplication.class)
                 .web(WebApplicationType.NONE)

@@ -37,6 +37,7 @@ public class DepartementControleur {
      * Instantiates a new Departement controleur.
      *
      * @param departementService the departement service
+     * @param villeService       the ville service
      */
     public DepartementControleur(DepartementService departementService, VilleService villeService) {
         this.departementService = departementService;
@@ -121,11 +122,28 @@ public class DepartementControleur {
         return ResponseEntity.ok("Departement supprimé avec succès. ");
     }
 
+    /**
+     * Gets departement by code.
+     *
+     * @param code the code
+     * @return the departement by code
+     * @throws VilleApiException the ville api exception
+     */
     @GetMapping("departement/{code}")
     public ResponseEntity<?> getDepartementByCode(@PathVariable String code) throws VilleApiException {
         DepartementDto dpt = departementService.extractDepartementByCode(code);
         return ResponseEntity.ok(dpt);
     }
+
+    /**
+     * Ville by departement fiche.
+     *
+     * @param code     the code
+     * @param response the response
+     * @throws VilleApiException the ville api exception
+     * @throws IOException       the io exception
+     * @throws DocumentException the document exception
+     */
 //
 // Ajoutez une méthode d’export PDF dans votre classe DepartementControleur.
 //    o La méthode PDF prend le code département en paramètre de chemin
