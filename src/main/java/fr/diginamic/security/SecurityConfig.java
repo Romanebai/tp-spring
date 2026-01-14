@@ -18,7 +18,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable());
         http.httpBasic(Customizer.withDefaults());
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.GET,"/**").hasAnyRole("USER, ADMIN")
+                .requestMatchers(HttpMethod.GET,"/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().hasRole("ADMIN")
         );
         return http.build();
