@@ -1,8 +1,7 @@
 package fr.diginamic;
 
-import fr.diginamic.daos.DepartementDao;
 import fr.diginamic.daos.DepartementRepository;
-import fr.diginamic.daos.RegionDao;
+import fr.diginamic.daos.RegionRepository;
 import fr.diginamic.dtos.DepartementDto;
 import fr.diginamic.dtos.RegionDto;
 import fr.diginamic.entities.Departement;
@@ -20,8 +19,13 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 public class TraitementFichiersApplication implements CommandLineRunner {
 
-    private final DepartementDao departementDao;
-    private final RegionDao regionDao;
+    private final DepartementRepository departementRepository;
+    private final RegionRepository regionRepository;
+
+    public TraitementFichiersApplication(DepartementRepository departementRepository, RegionRepository regionRepository) {
+        this.departementRepository = departementRepository;
+        this.regionRepository = regionRepository;
+    }
 
     /**
      * Instantiates a new Traitement fichiers application.
@@ -29,10 +33,7 @@ public class TraitementFichiersApplication implements CommandLineRunner {
      * @param departementDao the departement dao
      * @param regionDao      the region dao
      */
-    public TraitementFichiersApplication(DepartementDao departementDao, RegionDao regionDao) {
-        this.departementDao = departementDao;
-        this.regionDao = regionDao;
-    }
+
 
     /**
      * The entry point of application.
@@ -54,20 +55,36 @@ public class TraitementFichiersApplication implements CommandLineRunner {
             reg.setCode(region.getCode());
             reg.setNom(region.getNom());
 
-            regionDao.updateRegion(reg);
+            regionRepository.findByCode(reg.getCode())
+                    .ifPresentOrElse(
+                            existing -> {
+                                existing.setNom(reg.getNom());
+                                regionRepository.save(existing);
+                            },
+                            () -> regionRepository.save(reg)
+                    );
         }
 
         DepartementDto[] dtoArrayDep = restTemplate.getForObject("https://geo.api.gouv.fr/departements", DepartementDto[].class);
-        for (DepartementDto departement : dtoArrayDep) {
-            Departement dpt = new Departement();
 
+        for (DepartementDto departement : dtoArrayDep) {
+            Region reg = regionRepository.findByCode(departement.getCodeRegion())
+                    .orElseThrow(() -> new RuntimeException("Région introuvable : " + departement.getCodeRegion()));
+
+            Departement dpt = new Departement();
             dpt.setCode(departement.getCode());
             dpt.setNom(departement.getNom());
-
-            Region reg = regionDao.extractRegionByCode(departement.getCodeRegion());
             dpt.setRegion(reg);
 
-            departementDao.updateDepartement(dpt);
+            departementRepository.findByCode(dpt.getCode())
+                    .ifPresentOrElse(
+                            existing -> {
+                                existing.setNom(dpt.getNom());
+                                existing.setRegion(dpt.getRegion());
+                                departementRepository.save(existing);
+                            },
+                            () -> departementRepository.save(dpt)
+                    );
         }
 
         System.out.println("G FINI");

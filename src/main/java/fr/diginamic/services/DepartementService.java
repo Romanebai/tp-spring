@@ -1,9 +1,9 @@
 package fr.diginamic.services;
 
-import fr.diginamic.daos.DepartementDao;
 import fr.diginamic.daos.DepartementRepository;
-import fr.diginamic.daos.VilleDao;
+import fr.diginamic.daos.VilleRepository;
 import fr.diginamic.dtos.DepartementDto;
+import fr.diginamic.dtos.VilleDto;
 import fr.diginamic.entities.Departement;
 import fr.diginamic.entities.Ville;
 import fr.diginamic.exceptions.VilleApiException;
@@ -17,156 +17,90 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * The type Departement service.
- */
 @Service
 public class DepartementService {
 
     @Autowired
-    private DepartementDao departementDao;
+    private DepartementRepository departementRepository;
     @Autowired
-    private VilleDao villeDao;
-    @Autowired
-    private final DepartementRepository departementRepository;
+    private VilleRepository villeRepository;
 
     public DepartementService(DepartementRepository departementRepository) {this.departementRepository = departementRepository;}
 
-    public Page<DepartementDto> findAll(int page, int size) {
+    public Page<DepartementDto> findAll(int page, int size) throws VilleApiException {
         PageRequest pagination = PageRequest.of(page, size);
         Page<Departement> dpts = departementRepository.findAll(pagination);
         return dpts.map(DepartementMapper::dptDto);
     }
 
+    public Optional<DepartementDto> findByCode(String code) {
+        return departementRepository.findByCode(code)
+                .map(DepartementMapper::dptDto);
+    }
 
     public Optional<DepartementDto> findById(Integer id) {
         return departementRepository.findById(id).map(DepartementMapper::dptDto);
     }
 
     public DepartementDto findByNomStartingWith(String nom) {
-        Departement dpt = departementRepository.findByNomStartingWith(nom);
-        return DepartementMapper.dptDto(dpt);
-    }
-
-
-    /**
-     * Extract departements list.
-     *
-     * @return the list
-     * @throws VilleApiException the ville api exception
-     */
-    public List<DepartementDto> extractDepartements() throws VilleApiException {
-        List<Departement> dpt = departementDao.extractAll();
-        if (dpt.isEmpty()) {
-            throw new VilleApiException("La liste de département est vide.");
-        }
-        return DepartementMapper.dptToList(dpt);
-    }
-
-    /**
-     * Extract departement by id departement dto.
-     *
-     * @param id the id
-     * @return the departement dto
-     * @throws VilleApiException the ville api exception
-     */
-    public DepartementDto extractDepartementById(int id) throws VilleApiException {
-        Departement dpt = departementDao.extractDepartementById(id);
-
-        if (dpt == null) {
-            throw new VilleApiException("Le département n'a pas été trouvée pour cet id.");
-        }
-
-        return DepartementMapper.dptDto(dpt);
-    }
-
-    /**
-     * Extract departement by nom departement dto.
-     *
-     * @param nom the nom
-     * @return the departement dto
-     * @throws VilleApiException the ville api exception
-     */
-    public DepartementDto extractDepartementByNom(String nom) throws VilleApiException {
-        Departement departement = departementDao.extractDepartementByName(nom);
-        if (departement == null) {
-            throw new VilleApiException("Le département n'a pas été trouvée pour ce nom.");
-
-        }
+        Departement departement = departementRepository.findByNomStartingWith(nom);
         return DepartementMapper.dptDto(departement);
     }
 
-    public DepartementDto extractDepartementByCode(String code) throws VilleApiException {
-        Departement departement = departementDao.extractDepartementByCode(code);
-        if (departement == null) {
-            throw new VilleApiException("Le département n'a pas été trouvé pour ce code.");
-        }
-        return DepartementMapper.dptDto(departement);
-    }
-
-    /**
-     * Insert departement.
-     *
-     * @param dptDto the dpt dto
-     * @throws VilleApiException the ville api exception
-     */
     @Transactional
-    public void insertDepartement(DepartementDto dptDto) throws VilleApiException {
+    public DepartementDto insertDepartement(DepartementDto dptDto) throws VilleApiException {
 
-        Departement dpt = DepartementMapper.toEntity(dptDto);
-        if (dpt == null || dpt.getNom().length()<2) {
+        if (dptDto == null || dptDto.getNom().length()<2) {
             throw new VilleApiException("Le nom du département doit comporter au moins 2 caractères.");
-        } else if (dpt == null || dpt.getCode().length()<2) {
+        } else if (dptDto == null || dptDto.getCode().length()<2) {
             throw new VilleApiException("Le code du département doit comporter au moins 2 numéro.");
         }
+        Optional<Departement> existing = departementRepository.findAll()
+                .stream()
+                .filter(d -> d.getNom().equalsIgnoreCase(dptDto.getNom()) ||
+                        d.getCode().equalsIgnoreCase(dptDto.getCode()))
+                .findAny();
 
-        Departement nomDpt = departementDao.extractDepartementByName(dpt.getNom());
-        if (nomDpt != null) {
+        if (existing.isPresent()) {
             throw new VilleApiException("Le département existe déjà.");
         }
-        departementDao.insertDepartement(dpt);
+
+        Departement dpt = DepartementMapper.toEntity(dptDto);
+        Departement saved = departementRepository.save(dpt);
+        return DepartementMapper.dptDto(saved);
     }
 
-    /**
-     * Update departement.
-     *
-     * @param id        the id
-     * @param dptUpdate the dpt update
-     * @throws VilleApiException the ville api exception
-     */
     @Transactional
-    public void updateDepartement(int id, DepartementDto dptUpdate) throws VilleApiException {
-        Departement departement = departementDao.extractDepartementById(id);
-        if (departement == null) {
-            throw new VilleApiException("Le département n'a pas été trouvé pour cet id.");
-        }  else if (dptUpdate.getNom().length()<2) {
-            throw new VilleApiException("Le nom du département doit comporter au moins 2 caractères.");
-        } else if (dptUpdate.getCode().length()<2) {
-            throw new VilleApiException("Le code du département doit comporter au moins 2 numéro.");
+    public DepartementDto updateDepartement(int id, DepartementDto dptUpdate) throws VilleApiException {
+        Departement departement = departementRepository.findById(id)
+                .orElseThrow(() -> new VilleApiException("Le département n'a pas été trouvé pour cet id."));
+        if (dptUpdate == null) {
+            throw new VilleApiException("Les données du département sont manquantes.");
         }
+        if (dptUpdate.getNom() == null || dptUpdate.getNom().length() < 2) {
+            throw new VilleApiException("Le nom du département doit comporter au moins 2 caractères.");
+        }
+        if (dptUpdate.getCode() == null || dptUpdate.getCode().length() < 2) {
+            throw new VilleApiException("Le code du département doit comporter au moins 2 caractères.");
+        }
+
         departement.setNom(dptUpdate.getNom());
         departement.setCode(dptUpdate.getCode());
+
+        return DepartementMapper.dptDto(departement);
     }
 
-    /**
-     * Delete departement.
-     *
-     * @param id the id
-     * @throws VilleApiException the ville api exception
-     */
     @Transactional
     public void deleteDepartement(int id) throws VilleApiException {
-        Departement departement = departementDao.extractDepartementById(id);
-        List<Ville> villes = villeDao.extractVilleByDepartementId(id);
-
+        List<Ville> villes = villeRepository.findByDepartementId(id);
         if (!villes.isEmpty()) {
             throw new VilleApiException("Impossible de supprimer le département, des villes y sont rattachées.");
         }
 
-        if (departement == null) {
+        if (!departementRepository.existsById(id)) {
             throw new VilleApiException("Le département n'a pas été trouvé pour cet id.");
         }
 
-        departementDao.removeDepartementById(id);
+        departementRepository.deleteById(id);
     }
 }

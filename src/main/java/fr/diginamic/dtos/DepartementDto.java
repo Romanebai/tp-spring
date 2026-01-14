@@ -31,8 +31,7 @@ public class DepartementDto {
 
     @Override
     public String toString() {
-        return "ID : " + id +
-                " - " + code + " - " + nom;
+        return "\n" + "ID:" + id + "\n" + "Département: " + code +  " - " + nom;
     }
 
     /**

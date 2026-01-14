@@ -1,6 +1,7 @@
 package fr.diginamic.services;
 
 import fr.diginamic.dtos.VilleDto;
+import fr.diginamic.exceptions.VilleApiException;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -24,4 +25,10 @@ public interface VilleService {
     Page<VilleDto> mostPopByDepartement(String dept, int n);
 
     List<VilleDto> extractVilleByDepartementId(int id);
+
+    VilleDto createVille(VilleDto villeDto) throws VilleApiException;
+
+    VilleDto updateVille(int id, VilleDto ville) throws VilleApiException;
+
+    void deleteVille(int id) throws VilleApiException;
 }

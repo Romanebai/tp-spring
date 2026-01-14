@@ -25,7 +25,6 @@ public interface IVilleControleur {
     })
     ResponseEntity<?> getVilles(int page, int size)throws VilleApiException;
 
-
     ResponseEntity<?> getVilleById(@PathVariable int id) throws VilleApiException;
 
     ResponseEntity<?> getVillesByNom(@PathVariable String nom) throws VilleApiException;

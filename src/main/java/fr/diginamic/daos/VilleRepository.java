@@ -3,18 +3,21 @@ package fr.diginamic.daos;
 import fr.diginamic.entities.Ville;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-public interface VilleRepository extends CrudRepository<Ville, Integer> {
+public interface VilleRepository extends JpaRepository<Ville, Integer> {
 
     Page<Ville> findAll(Pageable pageable);
 
-    List<Ville>findByDepartementId(int id);
+    Optional<Ville> findById(Integer id);
 
-    //Recherche de toutes les villes dont le nom commence par une chaine de caractères
+    Optional<Ville> findByNom(String nom);
     Ville findByNomStartingWith(String nom);
+
+    List<Ville>findByDepartementId(int id);
 
     //Recherche de toutes les villes dont la population est supérieure à min
     List<Ville>findByPopulationGreaterThanOrderByPopulationDesc(int min);
