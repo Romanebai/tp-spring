@@ -23,7 +23,9 @@ public interface IVilleControleur {
                     content = @Content(mediaType = "application/json",
                             array = @ArraySchema(schema = @Schema(implementation = VilleDto.class))))
     })
-    ResponseEntity<?> getVilles(int page, int size)throws VilleApiException;
+    ResponseEntity<?> getVilles()throws VilleApiException;
+
+    //ResponseEntity<?> getVilles(int page, int size)throws VilleApiException;
 
     ResponseEntity<?> getVilleById(@PathVariable int id) throws VilleApiException;
 

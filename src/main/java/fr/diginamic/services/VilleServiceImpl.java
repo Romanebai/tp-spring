@@ -58,6 +58,12 @@ public class VilleServiceImpl implements VilleService {
     }
 
     @Override
+    public List<VilleDto> findAllVilles() {
+        List<Ville> ville = villeRepository.findAll();
+        return villeMapper.villeDtoList(ville);
+    }
+
+    @Override
     public VilleDto findByNomStartingWith(String nom) {
          Ville ville = villeRepository.findByNomStartingWith(nom);
          return villeMapper.villeDto(ville);

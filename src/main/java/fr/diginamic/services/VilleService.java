@@ -12,6 +12,8 @@ public interface VilleService {
 
     Page<VilleDto> findAll(int page, int size);
 
+    List<VilleDto> findAllVilles();
+
     VilleDto findByNomStartingWith(String nom);
 
     List<VilleDto> populationSupMin(int min);

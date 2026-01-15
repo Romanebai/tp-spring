@@ -10,7 +10,9 @@ import java.util.Optional;
 
 public interface VilleRepository extends JpaRepository<Ville, Integer> {
 
-    Page<Ville> findAll(Pageable pageable);
+    //Page<Ville> findAll(Pageable pageable);
+
+    List<Ville> findAll();
 
     Optional<Ville> findById(Integer id);
 
