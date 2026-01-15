@@ -9,11 +9,15 @@ import fr.diginamic.entities.Ville;
 import fr.diginamic.exceptions.VilleApiException;
 import fr.diginamic.mappers.DepartementMapper;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +28,8 @@ public class DepartementService {
     private DepartementRepository departementRepository;
     @Autowired
     private VilleRepository villeRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DepartementService.class);
+
 
     public DepartementService(DepartementRepository departementRepository) {this.departementRepository = departementRepository;}
 
@@ -65,8 +71,16 @@ public class DepartementService {
             throw new VilleApiException("Le département existe déjà.");
         }
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         Departement dpt = DepartementMapper.toEntity(dptDto);
+
+        dpt.setDateMaj(LocalDateTime.now());
+        dpt.setUserMaj(username);
         Departement saved = departementRepository.save(dpt);
+
+        LOGGER.info("Ajout département : nom={}, code={}, id={} par {}\"", saved.getNom(), saved.getCode(), saved.getId(), username);
+
         return DepartementMapper.dptDto(saved);
     }
 
@@ -84,23 +98,37 @@ public class DepartementService {
             throw new VilleApiException("Le code du département doit comporter au moins 2 caractères.");
         }
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         departement.setNom(dptUpdate.getNom());
         departement.setCode(dptUpdate.getCode());
+        departement.setDateMaj(LocalDateTime.now());
+        departement.setUserMaj(username);
 
-        return DepartementMapper.dptDto(departement);
+
+
+        Departement saved = departementRepository.save(departement);
+        LOGGER.info(
+                "Modification département : id={}, nom={}, code={} par {}", saved.getId(), saved.getNom(), saved.getCode(), username
+        );
+
+        return DepartementMapper.dptDto(saved);
     }
 
     @Transactional
     public void deleteDepartement(int id) throws VilleApiException {
+        Departement departement = departementRepository.findById(id)
+                .orElseThrow(() -> new VilleApiException("Le département n'a pas été trouvé pour cet id."));
+
         List<Ville> villes = villeRepository.findByDepartementId(id);
         if (!villes.isEmpty()) {
             throw new VilleApiException("Impossible de supprimer le département, des villes y sont rattachées.");
         }
 
-        if (!departementRepository.existsById(id)) {
-            throw new VilleApiException("Le département n'a pas été trouvé pour cet id.");
-        }
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        departementRepository.deleteById(id);
+        LOGGER.info("Suppression département : id={}, nom={}, code={} par {}", departement.getId(), departement.getNom(), departement.getCode(), username);
+
+        departementRepository.delete(departement);
     }
 }

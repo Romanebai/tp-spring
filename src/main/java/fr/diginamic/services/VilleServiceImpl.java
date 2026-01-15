@@ -1,16 +1,21 @@
 package fr.diginamic.services;
 
 import fr.diginamic.daos.DepartementRepository;
+import fr.diginamic.daos.UserRepository;
 import fr.diginamic.daos.VilleRepository;
 import fr.diginamic.dtos.VilleDto;
 import fr.diginamic.entities.Departement;
 import fr.diginamic.entities.Ville;
 import fr.diginamic.exceptions.VilleApiException;
 import fr.diginamic.mappers.IVilleMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +28,8 @@ public class VilleServiceImpl implements VilleService {
     private final VilleRepository villeRepository;
     private final IVilleMapper villeMapper;
     private final DepartementRepository departementRepository;
+    private static final Logger LOGGER = LoggerFactory.getLogger(VilleServiceImpl.class);
+
 
     public VilleServiceImpl (IVilleMapper villeMapper, VilleRepository villeRepository, DepartementRepository departementRepository) {
         this.villeRepository = villeRepository;
@@ -127,9 +134,16 @@ public class VilleServiceImpl implements VilleService {
                     });
         }
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         ville.setDepartement(departement);
+        ville.setDateMaj(LocalDateTime.now());
+        ville.setUserMaj(username);
+
+
 
         Ville savedVille = villeRepository.save(ville);
+        LOGGER.info("Ajout ville : nom={}, population={}, departement={} par {}\"", savedVille.getNom(), savedVille.getPopulation(), savedVille.getDepartement().getNom(),username);
 
         return villeMapper.villeDto(savedVille);
     }
@@ -149,18 +163,29 @@ public class VilleServiceImpl implements VilleService {
             throw new VilleApiException("La population doit être positive.");
         }
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
         ville.setNom(villeUpdate.getNom());
         ville.setPopulation(villeUpdate.getPopulation());
+        ville.setDateMaj(LocalDateTime.now());
+        ville.setUserMaj(username);
+
+        Ville savedVille = villeRepository.save(ville);
+
+        LOGGER.info("Modification ville : nom={}, population={}, departement={} par {}\"", savedVille.getNom(), savedVille.getPopulation(), savedVille.getDepartement().getNom(),username);
 
         return villeMapper.villeDto(ville);
     }
 
     @Override
     public void deleteVille(int id) throws VilleApiException {
-        if (!villeRepository.existsById(id)) {
-            throw new VilleApiException("La ville n'a pas été trouvée pour cet id.");
-        }
-        villeRepository.deleteById(id);
+
+        Ville ville = villeRepository.findById(id).orElseThrow(() -> new VilleApiException("La ville n'a pas été trouvée pour cet id."));
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        LOGGER.info("Suppression ville : id={}, nom={} par {}", ville.getId(), ville.getNom(), username);
+
+        villeRepository.delete(ville);
     }
 
 }

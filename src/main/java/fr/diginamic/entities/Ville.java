@@ -3,6 +3,8 @@ package fr.diginamic.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 /**
  * The type Ville.
  */
@@ -13,6 +15,8 @@ public class Ville {
     private int id;
     private String nom;
     private int population;
+    private String userMaj;
+    private LocalDateTime dateMaj;
 
     @ManyToOne
     @JoinColumn(name="DEPT_ID")
@@ -99,5 +103,21 @@ public class Ville {
      */
     public void setDepartement(Departement departement) {
         this.departement = departement;
+    }
+
+    public String getUserMaj() {
+        return userMaj;
+    }
+
+    public void setUserMaj(String userMaj) {
+        this.userMaj = userMaj;
+    }
+
+    public LocalDateTime getDateMaj() {
+        return dateMaj;
+    }
+
+    public void setDateMaj(LocalDateTime dateMaj) {
+        this.dateMaj = dateMaj;
     }
 }

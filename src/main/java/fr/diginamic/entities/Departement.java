@@ -2,6 +2,7 @@ package fr.diginamic.entities;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class Departement {
 
     private String code;
     private String nom;
+    private String userMaj;
+    private LocalDateTime dateMaj;
 
     @OneToMany(mappedBy="departement")
     private List<Ville> villes = new ArrayList<>();
@@ -113,5 +116,21 @@ public class Departement {
 
     public void setRegion(Region region) {
         this.region = region;
+    }
+
+    public String getUserMaj() {
+        return userMaj;
+    }
+
+    public void setUserMaj(String userMaj) {
+        this.userMaj = userMaj;
+    }
+
+    public LocalDateTime getDateMaj() {
+        return dateMaj;
+    }
+
+    public void setDateMaj(LocalDateTime dateMaj) {
+        this.dateMaj = dateMaj;
     }
 }

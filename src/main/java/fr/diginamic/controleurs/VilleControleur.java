@@ -7,6 +7,7 @@ import fr.diginamic.services.VilleService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class VilleControleur implements IVilleControleur {
         this.villeService = villeService;
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/id/{id}")
     public ResponseEntity<VilleDto> getVilleById(@PathVariable int id) throws VilleApiException {
         VilleDto ville = villeService.findById(id)
@@ -38,6 +40,7 @@ public class VilleControleur implements IVilleControleur {
         return ResponseEntity.ok(ville);
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/all")
     public ResponseEntity<?> getVilles(@RequestParam int page, @RequestParam int size) throws VilleApiException {
         Page<VilleDto> villes = villeService.findAll(page,size);
@@ -45,36 +48,42 @@ public class VilleControleur implements IVilleControleur {
     }
 
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/nom/{nom}")
     public ResponseEntity<?> getVillesByNom(@PathVariable String nom) throws VilleApiException {
         VilleDto ville = villeService.findByNomStartingWith(nom);
         return ResponseEntity.ok().body(ville);
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/population/sup")
     public ResponseEntity<?> popSupMin(@RequestParam int min) throws VilleApiException {
         List<VilleDto> villes = villeService.populationSupMin(min);
         return ResponseEntity.ok().body(villes);
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/population/between")
     public ResponseEntity<?> popSupMax(@RequestParam int min, @RequestParam int max) throws VilleApiException {
         List<VilleDto> villes = villeService.populationBetweenMinAndMax(min, max);
         return ResponseEntity.ok().body(villes);
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/population/departement/sup")
     public ResponseEntity<?>deptPopSupMin(@RequestParam String dpt, @RequestParam int min) throws VilleApiException {
         List<VilleDto> villes = villeService.byDepartementPopSupMin(dpt, min);
         return ResponseEntity.ok().body(villes);
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/population/departement/between")
     public ResponseEntity<?>deptPopBetweenMinMax(@RequestParam String dpt, @RequestParam int min, @RequestParam int max) throws VilleApiException {
         List<VilleDto> villes = villeService.byDepartementPopBetweenMinMax(dpt, min, max);
         return ResponseEntity.ok().body(villes);
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/top")
     public ResponseEntity<?> topVilles(@RequestParam String dpt, @RequestParam int n) {
         Page<VilleDto> villes = villeService.mostPopByDepartement(dpt, n);
@@ -93,6 +102,7 @@ public class VilleControleur implements IVilleControleur {
 //Ajoutez une méthode dans votre classe VilleControleur qui exporte au format CSV toutes les
     //villes dont la population est supérieure à un minimum donné.
     // nom de la ville, nombre d’habitants, codedépartement, nom du département
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/{min}/fiche")
     public void ficheVilleSupMin(@PathVariable int min, HttpServletResponse response) throws VilleApiException, IOException, DocumentException {
         response.setHeader("Content-Disposition","attachement; filename=\"fichier.csv");
@@ -105,12 +115,14 @@ public class VilleControleur implements IVilleControleur {
 
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/add")
     public ResponseEntity<VilleDto> addVille(@RequestBody VilleDto ville) throws VilleApiException {
         VilleDto newVille = villeService.createVille(ville);
         return ResponseEntity.ok(newVille);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping("/id/{id}")
     public ResponseEntity<VilleDto> updateVille(
             @PathVariable int id,
@@ -120,6 +132,7 @@ public class VilleControleur implements IVilleControleur {
         return ResponseEntity.ok(updated);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/id/{id}")
     public ResponseEntity<String> deleteVille(@PathVariable int id) throws VilleApiException {
         villeService.deleteVille(id);

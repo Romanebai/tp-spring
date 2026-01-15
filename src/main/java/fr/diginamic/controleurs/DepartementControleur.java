@@ -13,6 +13,7 @@ import fr.diginamic.services.VilleService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -30,11 +31,13 @@ public class DepartementControleur {
         this.villeService = villeService;
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/all")
     public ResponseEntity<?> getDepartements(@RequestParam int page, @RequestParam int size) throws VilleApiException {
         return ResponseEntity.ok(departementService.findAll(page,size));
     }
 
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/id/{id}")
     public ResponseEntity<DepartementDto> getDepartementById(@PathVariable int id) throws VilleApiException {
         DepartementDto dpt = departementService.findById(id)
@@ -42,31 +45,15 @@ public class DepartementControleur {
         return ResponseEntity.ok(dpt);
     }
 
-    @GetMapping("/nom")
-    public ResponseEntity<DepartementDto> getDepartementByNom(@RequestParam String nom) throws VilleApiException {
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
+    @GetMapping("/nom/{nom}")
+    public ResponseEntity<DepartementDto> getDepartementByNom(@PathVariable String nom) throws VilleApiException {
         DepartementDto dpt = departementService.findByNomStartingWith(nom);
         if (dpt == null) throw new VilleApiException("Le département n'a pas été trouvé.");
         return ResponseEntity.ok(dpt);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<DepartementDto> addDepartement(@Valid @RequestBody DepartementDto dpt) throws VilleApiException {
-        DepartementDto created = departementService.insertDepartement(dpt);
-        return ResponseEntity.ok(created);
-    }
-
-    @PutMapping("/id/{id}")
-    public ResponseEntity<DepartementDto> updateDepartement(@PathVariable int id, @RequestBody DepartementDto dpt) throws VilleApiException {
-        DepartementDto updated = departementService.updateDepartement(id, dpt);
-        return ResponseEntity.ok(updated);
-    }
-
-    @DeleteMapping("/id/{id}")
-    public ResponseEntity<String> deleteDepartement(@PathVariable int id) throws VilleApiException {
-        departementService.deleteDepartement(id);
-        return ResponseEntity.ok("Département supprimé avec succès.");
-    }
-
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/code/{code}")
     public ResponseEntity<DepartementDto> getDepartementByCode(@PathVariable String code) throws VilleApiException {
         return ResponseEntity.ok(
@@ -74,6 +61,28 @@ public class DepartementControleur {
                         .orElseThrow(() -> new VilleApiException("Le département n'a pas été trouvé."))
         );
     }
+
+    @Secured("ROLE_ADMIN")
+    @PostMapping("/add")
+    public ResponseEntity<DepartementDto> addDepartement(@Valid @RequestBody DepartementDto dpt) throws VilleApiException {
+        DepartementDto created = departementService.insertDepartement(dpt);
+        return ResponseEntity.ok(created);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @PutMapping("/id/{id}")
+    public ResponseEntity<DepartementDto> updateDepartement(@PathVariable int id, @RequestBody DepartementDto dpt) throws VilleApiException {
+        DepartementDto updated = departementService.updateDepartement(id, dpt);
+        return ResponseEntity.ok(updated);
+    }
+
+    @Secured("ROLE_ADMIN")
+    @DeleteMapping("/id/{id}")
+    public ResponseEntity<String> deleteDepartement(@PathVariable int id) throws VilleApiException {
+        departementService.deleteDepartement(id);
+        return ResponseEntity.ok("Département supprimé avec succès.");
+    }
+
 
     //
 // Ajoutez une méthode d’export PDF dans votre classe DepartementControleur.
@@ -83,6 +92,7 @@ public class DepartementControleur {
 //   ▪ Code du département
 //▪ Nom du département
 //▪ Liste des villes de ce département avec nom et population
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/code/{code}/fiche")
     public void villeByDepartementFiche(
             @PathVariable String code,
